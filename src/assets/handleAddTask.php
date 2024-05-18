@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: http://localhost:5173');
 $task = $_POST['task'];
 
 // Absolute path to the XML file
-$xmlFilePath = '../public/database.xml';
+$xmlFilePath = '../database.xml';
 
 // Load the XML file
 $xml = new DOMDocument();

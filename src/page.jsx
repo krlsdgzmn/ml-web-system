@@ -25,7 +25,7 @@ export default function LoginPage() {
       });
 
       // Redirect to dashboard
-      window.location.href = "/overview";
+      window.location.href = "/prediction";
     }
     // else if empty username or password
     else if (!username || !password) {
@@ -49,8 +49,6 @@ export default function LoginPage() {
     <>
       <header className="top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:sticky">
         <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
-          {/* md-lg screen navigation */}
-
           {/* logo */}
           <img src={logo} alt="MKSG Logo" className="w-28 dark:invert" />
 

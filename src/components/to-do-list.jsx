@@ -58,7 +58,7 @@ export default function ToDoList() {
   const handleDoneTask = (index) => {
     $.ajax({
       type: "POST",
-      url: "http://localhost:8080/PHP/handleDoneTask.php",
+      url: "assets/handleDoneTask.php",
       data: { index },
       success: (response) => {
         console.log(response);
@@ -85,7 +85,7 @@ export default function ToDoList() {
         <CardContent>
           {/* Form */}
           <form
-            action="http://localhost:8080/PHP/handleAddTask.php"
+            action="assets/handleAddTask.php"
             method="POST"
             onSubmit={handleAddTask}
             className="flex w-full items-center space-x-2"

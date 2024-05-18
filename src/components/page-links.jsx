@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 export default function PageLinks({ isCurrent, className }) {
   const links = [
     {
-      label: "Overview",
-      path: "/overview",
-    },
-    {
       label: "Prediction",
       path: "/prediction",
+    },
+    {
+      label: "Overview",
+      path: "/overview",
     },
     {
       label: "Gallery",

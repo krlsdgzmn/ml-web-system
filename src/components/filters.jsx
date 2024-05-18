@@ -48,7 +48,7 @@ export default function Filters({
       </Select>
 
       <Select onValueChange={setOrderStatus} value={orderStatus}>
-        <SelectTrigger className="w-44">
+        <SelectTrigger className="w-[188px]">
           <SelectValue>
             {orderStatus !== null
               ? orderStatus == 1

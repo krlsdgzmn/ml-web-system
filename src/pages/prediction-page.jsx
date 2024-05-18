@@ -6,13 +6,17 @@ import { useToast } from "@/components/ui/use-toast";
 import { useFetchData } from "@/hooks/use-fetch-data";
 import Filters from "@/components/filters";
 import KPICard from "@/components/kpi-card";
+import OrderStatusPieCard from "@/components/order-status-pie-card";
+import DistanceRangeBarCard from "@/components/distance-range-bar-card";
+import MonthBarCard from "@/components/month-bar-card";
+import WeekBarCard from "@/components/week-bar-card";
 
 const buildQuery = (month, week, orderStatus) => {
   const params = new URLSearchParams();
   if (month) params.append("month", month);
   if (week) params.append("week", week);
   if (orderStatus !== null) params.append("order_status", orderStatus);
-  return `http://localhost:8000/api/predictions/?${params.toString()}`;
+  return `https://mksg-clothing.onrender.com/api/predictions/?${params.toString()}`;
 };
 
 export default function PredictionPage() {
@@ -42,7 +46,9 @@ export default function PredictionPage() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/predictions/${id}/`);
+      await axios.delete(
+        `https://mksg-clothing.onrender.com/api/predictions/${id}/`,
+      );
       toast({
         description: `You have successfully deleted the record with ID ${id}`,
       });
@@ -78,38 +84,56 @@ export default function PredictionPage() {
             />
           </div>
 
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 md:gap-4 lg:grid-cols-8">
-            <div className="col-span-5 grid gap-2 sm:grid-cols-3 md:gap-4">
-              <KPICard
-                title="Total Orders"
-                dataLength={data.length}
-                className="bg-background invert"
-              />
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+            <div className="grid gap-2 lg:col-span-3 lg:gap-4">
+              <div className="row-span-1 grid grid-cols-3 gap-2 lg:gap-4">
+                <KPICard
+                  title="Total Orders"
+                  dataLength={data.length}
+                  className="bg-background invert"
+                />
+                <KPICard
+                  title="Completed Orders"
+                  dataLength={
+                    data.filter((item) => item.order_status === 0).length
+                  }
+                  className="bg-green-500"
+                />
+                <KPICard
+                  title="Cancelled Orders"
+                  dataLength={
+                    data.filter((item) => item.order_status === 1).length
+                  }
+                  className="bg-red-500"
+                />
+              </div>
 
-              <KPICard
-                title="Completed Orders"
-                dataLength={
-                  data.filter((item) => item.order_status === 0).length
-                }
-                className="bg-green-500"
-              />
+              <div className="row-span-2 grid flex-col gap-2 md:grid-cols-2 lg:col-span-2 lg:hidden lg:gap-4">
+                <DistanceRangeBarCard month={month} week={week} data={data} />
+                <OrderStatusPieCard month={month} week={week} data={data} />
+              </div>
 
-              <KPICard
-                title="Cancelled Orders"
-                dataLength={
-                  data.filter((item) => item.order_status === 1).length
-                }
-                className="bg-red-500"
+              <MonthBarCard month={month} week={week} data={data} />
+
+              <WeekBarCard
+                month={month}
+                week={week}
+                data={data}
+                className="lg:hidden"
+              />
+              <DataTable
+                data={data}
+                loading={loading}
+                handleDelete={handleDelete}
+                handlePost={handlePost}
               />
             </div>
 
-            <DataTable
-              data={data}
-              loading={loading}
-              handleDelete={handleDelete}
-              handlePost={handlePost}
-              className="col-span-5"
-            />
+            <div className="row-span-2 hidden flex-col gap-2 lg:col-span-2 lg:flex lg:gap-4">
+              <DistanceRangeBarCard month={month} week={week} data={data} />
+              <OrderStatusPieCard month={month} week={week} data={data} />
+              <WeekBarCard month={month} week={week} data={data} />
+            </div>
           </div>
         </section>
       </main>

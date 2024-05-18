@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: http://localhost:5173');
 $index = $_POST['index'];
 
 // Load the XML file
-$xmlFilePath = '../public/database.xml';
+$xmlFilePath = '../database.xml';
 $xml = new DOMDocument();
 $xml->load($xmlFilePath);
 

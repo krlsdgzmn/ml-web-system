@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./page";
+import PredictionPage from "./pages/prediction-page";
+import OverviewPage from "./pages/overview-page";
+import GalleryPage from "./pages/gallery-page";
 import { ThemeProvider } from "./components/ui/theme-provider";
 import { Toaster } from "./components/ui/toaster";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import OverviewPage from "./pages/overview-page";
-import PredictionPage from "./pages/prediction-page";
-import GalleryPage from "./pages/gallery-page";
 
 const router = createBrowserRouter([
   {
@@ -15,12 +15,12 @@ const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/overview",
-    element: <OverviewPage />,
-  },
-  {
     path: "/prediction",
     element: <PredictionPage />,
+  },
+  {
+    path: "/overview",
+    element: <OverviewPage />,
   },
   {
     path: "/gallery",
