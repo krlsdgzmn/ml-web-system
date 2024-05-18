@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { logo } from "./assets";
 import DateTime from "./components/datetime";
 import { Button } from "./components/ui/button";
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const USERNAME = "admin";
   const PASSWORD = "admin123";
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,19 +26,14 @@ export default function LoginPage() {
         description: "Login successful!",
       });
 
-      // Redirect to dashboard
-      window.location.href = "/prediction";
-    }
-    // else if empty username or password
-    else if (!username || !password) {
+      navigate("/prediction");
+    } else if (!username || !password) {
       toast({
         title: "Error",
         description: "Please fill in all fields.",
         variant: "destructive",
       });
-    }
-    // else if wrong username or password
-    else {
+    } else {
       toast({
         title: "Error",
         description: "Invalid username or password.",
@@ -49,19 +46,14 @@ export default function LoginPage() {
     <>
       <header className="top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:sticky">
         <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
-          {/* logo */}
           <img src={logo} alt="MKSG Logo" className="w-28 dark:invert" />
-
           <div className="flex items-center gap-4">
-            {/* datetime preview */}
             <DateTime className="font-jetbrains text-right font-mono text-xs text-foreground/60" />
-            {/* mode toggle */}
             <ModeToggle />
           </div>
         </div>
       </header>
 
-      {/* Login Section */}
       <section className="flex min-h-[75vh] flex-col items-center justify-center py-8">
         <Card className="min-w-screen-sm w-[400px] border bg-transparent p-8 text-center shadow-md shadow-primary/40">
           <h1 className="text-2xl font-semibold">
@@ -71,9 +63,7 @@ export default function LoginPage() {
 
           <form className="space-y-4 py-8" onSubmit={handleSubmit}>
             <Input type="text" placeholder="Username" name="username" />
-
             <Input type="password" placeholder="Password" name="password" />
-
             <Button type="submit" className="w-full">
               Login
             </Button>
