@@ -26,6 +26,11 @@ const router = createBrowserRouter([
     path: "/gallery",
     element: <GalleryPage />,
   },
+  // Catch-all route to redirect to the prediction page
+  {
+    path: "*",
+    element: <PredictionPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
