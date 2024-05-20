@@ -4,9 +4,22 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { TbMenuDeep } from "react-icons/tb";
 import DateTime from "./datetime";
 import { ModeToggle } from "./ui/mode-toggle";
+import { MdLogout } from "react-icons/md";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
+import { toast } from "./ui/use-toast";
 
 export default function Header() {
   const isCurrent = (path) => window.location.pathname === path;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/");
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
+  };
 
   return (
     <header className="top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:sticky">
@@ -39,8 +52,17 @@ export default function Header() {
         <div className="flex items-center gap-4">
           {/* datetime preview */}
           <DateTime className="font-jetbrains text-right font-mono text-xs text-foreground/60" />
-          {/* mode toggle */}
-          <ModeToggle />
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleLogout}
+              title="Logout"
+            >
+              <MdLogout size={20} />
+            </Button>
+          </div>
         </div>
       </div>
     </header>

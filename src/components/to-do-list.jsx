@@ -25,7 +25,6 @@ export default function ToDoList() {
           .parseFromString(response, "text/xml")
           .getElementsByTagName("toDo");
 
-        // store to toDoList list of object
         const taskList = Array.from(xml).map((t) => t.getAttribute("task"));
         setToDoList(taskList);
       } catch (error) {

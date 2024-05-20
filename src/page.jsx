@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { logo } from "./assets";
 import DateTime from "./components/datetime";
@@ -10,11 +11,44 @@ import { useToast } from "./components/ui/use-toast";
 export default function LoginPage() {
   const USERNAME = "admin";
   const PASSWORD = "admin123";
+  const MAX_ATTEMPTS = 3;
+  const TIMEOUT_DURATION = 60000;
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [isTimeout, setIsTimeout] = useState(false);
+  const [remainingTime, setRemainingTime] = useState(TIMEOUT_DURATION / 1000);
+
+  useEffect(() => {
+    let intervalId;
+    if (isTimeout) {
+      intervalId = setInterval(() => {
+        setRemainingTime((prevTime) => {
+          if (prevTime === 1) {
+            clearInterval(intervalId);
+            setIsTimeout(false);
+            setAttemptCount(0);
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(intervalId);
+  }, [isTimeout]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (isTimeout) {
+      toast({
+        title: "Error",
+        description: `Login attempts exceeded. Please try again later. ${remainingTime}s`,
+        variant: "destructive",
+      });
+      return;
+    }
 
     const formData = new FormData(e.target);
     const username = formData.get("username");
@@ -27,13 +61,13 @@ export default function LoginPage() {
       });
 
       navigate("/prediction");
-    } else if (!username || !password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields.",
-        variant: "destructive",
-      });
     } else {
+      setAttemptCount((prevCount) => prevCount + 1);
+      if (attemptCount + 1 >= MAX_ATTEMPTS) {
+        setIsTimeout(true);
+        setRemainingTime(TIMEOUT_DURATION / 1000);
+      }
+
       toast({
         title: "Error",
         description: "Invalid username or password.",

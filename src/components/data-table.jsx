@@ -17,7 +17,7 @@ import {
 import {
   discount_bin,
   distance_bin,
-  month,
+  monthShort,
   order_status,
   price_bin,
   week,
@@ -50,7 +50,7 @@ export default function DataTable({
       </CardHeader>
 
       <CardContent>
-        <Table>
+        <Table className="text-sm">
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
@@ -59,7 +59,7 @@ export default function DataTable({
               <TableHead>Month</TableHead>
               <TableHead>Week</TableHead>
               <TableHead>Distance Range</TableHead>
-              <TableHead>Cancellation Rate</TableHead>
+              <TableHead>Cancel Rate</TableHead>
               <TableHead>Order Status</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -78,7 +78,9 @@ export default function DataTable({
                   <TableCell>
                     {Object.keys(discount_bin)[item.discount_bin - 1]}
                   </TableCell>
-                  <TableCell>{Object.keys(month)[item.month - 1]}</TableCell>
+                  <TableCell>
+                    {Object.keys(monthShort)[item.month - 1]}
+                  </TableCell>
                   <TableCell>{Object.keys(week)[item.week - 1]}</TableCell>
                   <TableCell>
                     {Object.keys(distance_bin)[item.distance_bin - 1]}
