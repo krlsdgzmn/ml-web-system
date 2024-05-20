@@ -109,17 +109,31 @@ export default function PredictionPage() {
               </div>
 
               <div className="row-span-2 grid flex-col gap-2 md:grid-cols-2 lg:col-span-2 lg:hidden lg:gap-4">
-                <DistanceRangeBarCard month={month} week={week} data={data} />
-                <OrderStatusPieCard month={month} week={week} data={data} />
+                <DistanceRangeBarCard
+                  month={month}
+                  week={week}
+                  data={data}
+                  loading={loading}
+                />
+                <OrderStatusPieCard
+                  month={month}
+                  week={week}
+                  data={data}
+                  loading={loading}
+                />
               </div>
-
-              <MonthBarCard month={month} week={week} data={data} />
-
+              <MonthBarCard
+                month={month}
+                week={week}
+                data={data}
+                loading={loading}
+              />
               <WeekBarCard
                 month={month}
                 week={week}
                 data={data}
                 className="lg:hidden"
+                loading={loading}
               />
               <DataTable
                 data={data}
@@ -130,9 +144,24 @@ export default function PredictionPage() {
             </div>
 
             <div className="row-span-2 hidden flex-col gap-2 lg:col-span-2 lg:flex lg:gap-4">
-              <DistanceRangeBarCard month={month} week={week} data={data} />
-              <OrderStatusPieCard month={month} week={week} data={data} />
-              <WeekBarCard month={month} week={week} data={data} />
+              <DistanceRangeBarCard
+                month={month}
+                week={week}
+                data={data}
+                loading={loading}
+              />
+              <OrderStatusPieCard
+                month={month}
+                week={week}
+                data={data}
+                loading={loading}
+              />
+              <WeekBarCard
+                month={month}
+                week={week}
+                data={data}
+                loading={loading}
+              />
             </div>
           </div>
         </section>

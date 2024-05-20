@@ -89,6 +89,7 @@ export default function WeekBarChart({ data }) {
                 stroke="#ef4444"
                 name="Cancelled Orders"
                 stackId="a"
+                type="monotone"
               />
               <Area
                 dataKey="completed"
@@ -96,6 +97,7 @@ export default function WeekBarChart({ data }) {
                 stroke="#22c55e"
                 name="Completed Orders"
                 stackId="a"
+                type="monotone"
               />
             </>
           ) : (

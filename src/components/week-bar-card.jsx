@@ -8,8 +8,9 @@ import {
 import { cn } from "@/lib/utils";
 import { month as monthOptions } from "@/constants";
 import WeekBarChart from "./figures/week-bar-chart.jsx";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default function WeekBarCard({ className, month, data, week }) {
+export default function WeekBarCard({ className, month, data, week, loading }) {
   return (
     <Card className={cn("h-[400px] overflow-hidden", className)}>
       <CardHeader>
@@ -24,12 +25,18 @@ export default function WeekBarCard({ className, month, data, week }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="w-full pl-0">
-        {data && data.length === 0 && (
-          <div className="pt-20 text-center text-sm text-gray-500">
-            No data available
+        {loading && (
+          <div className="flex w-full justify-center py-28">
+            <AiOutlineLoading3Quarters className="animate-spin" size={24} />
           </div>
         )}
-        <WeekBarChart data={data} />
+
+        {data.length === 0 && !loading && (
+          <div className="flex w-full justify-center py-28">
+            <p className="text-sm text-muted-foreground">No records found</p>
+          </div>
+        )}
+        {data.length > 0 && !loading && <WeekBarChart data={data} />}
       </CardContent>
     </Card>
   );

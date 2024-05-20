@@ -8,8 +8,15 @@ import {
 import DistanceRangeBarChart from "./figures/distance-range-bar-chart.jsx";
 import { cn } from "@/lib/utils";
 import { month as monthOptions } from "@/constants";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default function DistanceRangeBarCard({ className, month, data, week }) {
+export default function DistanceRangeBarCard({
+  className,
+  month,
+  data,
+  week,
+  loading,
+}) {
   return (
     <Card className={cn("h-[400px] overflow-hidden", className)}>
       <CardHeader>
@@ -24,12 +31,18 @@ export default function DistanceRangeBarCard({ className, month, data, week }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="w-full pl-0">
-        {data && data.length === 0 && (
-          <div className="pt-20 text-center text-sm text-gray-500">
-            No data available
+        {loading && (
+          <div className="flex w-full justify-center py-28">
+            <AiOutlineLoading3Quarters className="animate-spin" size={24} />
           </div>
         )}
-        <DistanceRangeBarChart data={data} />
+
+        {data.length === 0 && !loading && (
+          <div className="flex w-full justify-center py-28">
+            <p className="text-sm text-muted-foreground">No records found</p>
+          </div>
+        )}
+        {data.length > 0 && !loading && <DistanceRangeBarChart data={data} />}
       </CardContent>
     </Card>
   );

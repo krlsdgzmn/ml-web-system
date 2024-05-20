@@ -8,8 +8,15 @@ import {
 import OrderStatusPieChart from "./figures/order-status-pie-chart";
 import { cn } from "@/lib/utils";
 import { month as monthOptions } from "@/constants";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default function OrderStatusPieCard({ className, month, week, data }) {
+export default function OrderStatusPieCard({
+  className,
+  month,
+  week,
+  data,
+  loading,
+}) {
   return (
     <Card className={cn(" overflow-hidden", className)}>
       <CardHeader>
@@ -24,12 +31,18 @@ export default function OrderStatusPieCard({ className, month, week, data }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="h-[231px] w-full pl-0">
-        {data && data.length === 0 && (
-          <div className="pt-20 text-center text-sm text-gray-500">
-            No data available
+        {loading && (
+          <div className="flex w-full justify-center py-20">
+            <AiOutlineLoading3Quarters className="animate-spin" size={24} />
           </div>
         )}
-        <OrderStatusPieChart data={data} />
+
+        {data.length === 0 && !loading && (
+          <div className="flex w-full justify-center py-20">
+            <p className="text-sm text-muted-foreground">No records found</p>
+          </div>
+        )}
+        {data.length > 0 && !loading && <OrderStatusPieChart data={data} />}
       </CardContent>
     </Card>
   );
