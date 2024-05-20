@@ -7,15 +7,15 @@ from database import SessionLocal, engine
 import models
 import pickle
 import numpy as np
+import pandas as pd
 from fastapi.responses import RedirectResponse
 
 # Initialize FastAPI app
 app = FastAPI(
     title="MKSG Clothing Prediction API",
     description="API for predicting order status of MKSG Clothing",
-    version="0.1",
+    version="1.0",
 )
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,6 +44,7 @@ class PredictionBase(BaseModel):
     month: int
     week: int
     distance_bin: int
+    probability: Optional[int] = None
     order_status: Optional[int] = None
 
 
@@ -80,28 +81,36 @@ models.Base.metadata.create_all(bind=engine)
 
 
 # Helper function to encode prediction input data
-def encode_predictors(data: PredictionBase) -> np.ndarray:
-    predictors = [
-        data.price_bin,
-        data.discount_bin,
-        data.month,
-        data.week,
-        data.distance_bin,
-    ]
-    return np.array(predictors).reshape(1, -1)
+def encode_predictors(data: PredictionBase) -> pd.DataFrame:
+    predictors = {
+        "price_bin": [data.price_bin],
+        "discount_bin": [data.discount_bin],
+        "month": [data.month],
+        "week": [data.week],
+        "distance_bin": [data.distance_bin],
+    }
+    return pd.DataFrame(predictors)
 
 
 # Helper function to make a prediction using the loaded model
 def make_prediction(prediction_data: PredictionBase) -> int:
-    predictors = encode_predictors(prediction_data)
-    prediction = clf.predict(predictors)
+    predictors_df = encode_predictors(prediction_data)
+    prediction = clf.predict(predictors_df)
     return int(prediction[0])
+
+
+def calculate_probability(prediction_data: PredictionBase) -> int:
+    predictors_df = encode_predictors(prediction_data)
+    probability = clf.predict_proba(predictors_df)
+    positive_class_probability = probability[0][1]
+    return int(positive_class_probability * 100)
 
 
 # Endpoint to create a new prediction
 @app.post("/api/predictions/", response_model=PredictionModel)
 async def create_prediction(prediction: PredictionBase, db: Session = Depends(get_db)):
     prediction.order_status = make_prediction(prediction)
+    prediction.probability = calculate_probability(prediction)
     db_prediction = models.Prediction(**prediction.dict())
     db.add(db_prediction)
     db.commit()
@@ -122,8 +131,6 @@ async def read_predictions(
     order_status: Optional[conint(ge=0, le=1)] = Query(
         None, description="Filter by order status (0 for cancelled, 1 for completed)"
     ),
-    # skip: int = 0,
-    # limit: int = 10,
 ):
     try:
         query = db.query(models.Prediction)
@@ -134,7 +141,6 @@ async def read_predictions(
         if order_status is not None:
             query = query.filter(models.Prediction.order_status == order_status)
 
-        # results = query.offset(skip).limit(limit).all()
         results = query.all()
         return results
     except Exception as e:

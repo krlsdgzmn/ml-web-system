@@ -59,6 +59,7 @@ export default function DataTable({
               <TableHead>Month</TableHead>
               <TableHead>Week</TableHead>
               <TableHead>Distance Range</TableHead>
+              <TableHead>Cancellation Rate</TableHead>
               <TableHead>Order Status</TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -82,6 +83,7 @@ export default function DataTable({
                   <TableCell>
                     {Object.keys(distance_bin)[item.distance_bin - 1]}
                   </TableCell>
+                  <TableCell>{item.probability + "%"}</TableCell>
                   <TableCell>
                     <span
                       className={`rounded-full px-2 py-1 text-xs font-semibold text-white ${

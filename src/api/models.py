@@ -11,6 +11,7 @@ class Prediction(Base):
     month = Column(Integer)
     week = Column(Integer)
     distance_bin = Column(Integer)
+    probability = Column(Integer)
     order_status = Column(Integer)
 
 
