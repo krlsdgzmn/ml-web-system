@@ -47,8 +47,19 @@ class PredictionBase(BaseModel):
     order_status: Optional[int] = None
 
 
+class ToDoListBase(BaseModel):
+    task: str
+
+
 # Pydantic model for database response
 class PredictionModel(PredictionBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ToDoListModel(ToDoListBase):
     id: int
 
     class Config:
@@ -136,3 +147,28 @@ async def delete_prediction(prediction_id: int, db: Session = Depends(get_db)):
     db.query(models.Prediction).filter(models.Prediction.id == prediction_id).delete()
     db.commit()
     return {"message": "Prediction deleted successfully"}
+
+
+# Endpoint to create a new task
+@app.post("/api/todo_list/", response_model=ToDoListModel)
+async def create_task(task: ToDoListBase, db: Session = Depends(get_db)):
+    db_task = models.ToDoList(**task.dict())
+    db.add(db_task)
+    db.commit()
+    db.refresh(db_task)
+    return db_task
+
+
+# Endpoint to read all tasks
+@app.get("/api/todo_list/", response_model=List[ToDoListModel])
+async def read_tasks(db: Session = Depends(get_db)):
+    tasks = db.query(models.ToDoList).all()
+    return tasks
+
+
+# Endpoint to delete a task
+@app.delete("/api/todo_list/{task_id}/")
+async def delete_task(task_id: int, db: Session = Depends(get_db)):
+    db.query(models.ToDoList).filter(models.ToDoList.id == task_id).delete()
+    db.commit()
+    return {"message": "Task deleted successfully"}

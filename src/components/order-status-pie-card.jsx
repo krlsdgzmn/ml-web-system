@@ -30,7 +30,7 @@ export default function OrderStatusPieCard({
           {week && `- Week ${week}`}
         </CardDescription>
       </CardHeader>
-      <CardContent className="h-[231px] w-full pl-0">
+      <CardContent className="h-[227px] w-full pl-0">
         {loading && (
           <div className="flex w-full justify-center py-20">
             <AiOutlineLoading3Quarters className="animate-spin" size={24} />
