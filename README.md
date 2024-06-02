@@ -1,24 +1,13 @@
 # MKSG Clothing System
 
-## PHP CRUD Contents
-
-- **Folder**: `./PHP`
-  1. **Handle Add Task Action**: PHP script to handle the addition of new tasks to the system.
-  2. **Handle Done Task Action**: PHP script to mark tasks as completed within the system.
-
-## To Do List Database
-
-- **Folder**: `./public/database.xml`
-  - Contains the XML file used to store and manage the to-do list data.
-
 ## Pages
 
 1. **Login Page**: `./src/page.jsx`
    - The main entry point of the application where users log in to access other pages.
 2. **Prediction Page**: `./src/pages/prediction-page.jsx`
-   - Page where users can view and interact with order status predictions.
+   - Page where users can view and interact with order status predictions (Full-functional).
 3. **Overview Page**: `./src/pages/overview-page.jsx`
-   - Provides an overview of key metrics and data visualizations related to the business.
+   - Provides an overview of key metrics and data visualizations related to the business (Semi-functional).
 4. **Gallery Page**: `./src/pages/gallery-page.jsx`
    - Displays a gallery of images or other media related to the business.
 
@@ -30,7 +19,7 @@
 
   1. **Data Table**: Component for displaying data in a tabular format.
   2. **Datetime**: Component for showing the current date and time.
-  3. **To Do List Card (JQuery Fetching Method)**: Component for displaying and managing to-do list items using jQuery for data fetching.
+  3. **To Do List Card (JQuery Fetching Method)**: Component for displaying and managing to-do list.
   4. **Filters/Slicer Card**: Component for filtering data displayed in other components.
   5. **Form Dialog**: Component for displaying forms in a dialog box.
   6. **Header**: Component for the header section of the pages.
@@ -84,11 +73,6 @@
 
 - **Constants Folder**: `./src/constants`
   - Contains constants and mappings used throughout the application.
-
-## Production Build Folder (Minimized Version)
-
-- **Build Folder**: `./src/build`
-  - Contains the production build of the application with minimized and optimized files.
 
 ## Websites
 
