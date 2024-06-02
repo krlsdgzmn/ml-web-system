@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import $ from "jquery";
+import axios from "axios";
 import {
   Card,
   CardContent,
@@ -9,8 +9,8 @@ import {
 } from "./ui/card";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
-import { Input } from "./ui/input";
 import { TbCheckbox } from "react-icons/tb";
+import { Input } from "./ui/input";
 
 export default function ToDoList() {
   const [toDoList, setToDoList] = useState([]);
@@ -19,14 +19,10 @@ export default function ToDoList() {
   useEffect(() => {
     const fetchToDoList = async () => {
       try {
-        const database = await fetch("database.xml");
-        const response = await database.text();
-        const xml = new DOMParser()
-          .parseFromString(response, "text/xml")
-          .getElementsByTagName("toDo");
-
-        const taskList = Array.from(xml).map((t) => t.getAttribute("task"));
-        setToDoList(taskList);
+        const response = await axios.get(
+          "https://mksg-clothing.onrender.com/api/todo_list/",
+        );
+        setToDoList(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -35,46 +31,38 @@ export default function ToDoList() {
     fetchToDoList();
   }, []);
 
-  const handleAddTask = (e) => {
+  const handleAddTask = async (e) => {
     e.preventDefault();
 
-    const form = $(e.target);
-    $.ajax({
-      type: "POST",
-      url: form.attr("action"),
-      data: form.serialize(),
-      success: (response) => {
-        console.log(response);
-        setToDoList((t) => [...t, task]);
-        setTask("");
-      },
-      error: (_, __, error) => {
-        console.error(error);
-      },
-    });
+    try {
+      const response = await axios.post(
+        "https://mksg-clothing.onrender.com/api/todo_list/",
+        { task },
+      );
+      setToDoList([...toDoList, response.data]);
+      setTask("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDoneTask = (index) => {
-    $.ajax({
-      type: "POST",
-      url: "assets/handleDoneTask.php",
-      data: { index },
-      success: (response) => {
-        console.log(response);
-        const updatedLists = toDoList.filter((_, i) => i !== index);
-        setToDoList(updatedLists);
-      },
-      error: (_, __, error) => {
-        console.error(error);
-      },
-    });
+  const handleDoneTask = async (id) => {
+    try {
+      await axios.delete(
+        `https://mksg-clothing.onrender.com/api/todo_list/${id}/`,
+      );
+      const newToDoList = toDoList.filter((item) => item.id !== id);
+      setToDoList(newToDoList);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="col-span-5 h-fit lg:col-span-3">
       <Card className="h-full">
         <CardHeader>
-          <CardTitle className="md:text text-xl font-semibold">
+          <CardTitle className="text-xl font-semibold md:text">
             To Do List
           </CardTitle>
           <CardDescription>
@@ -84,10 +72,8 @@ export default function ToDoList() {
         <CardContent>
           {/* Form */}
           <form
-            action="assets/handleAddTask.php"
-            method="POST"
             onSubmit={handleAddTask}
-            className="flex w-full items-center space-x-2"
+            className="flex items-center w-full space-x-2"
           >
             <Input
               value={task}
@@ -105,18 +91,18 @@ export default function ToDoList() {
           </form>
 
           <ul>
-            {toDoList.map((toDo, index) => (
+            {toDoList.map((toDo) => (
               <li
-                key={index}
-                className="flex items-center space-x-2 border-b py-5"
+                key={toDo.id}
+                className="flex items-center py-5 space-x-2 border-b"
               >
-                <Label htmlFor={index} className="w-full">
-                  {toDo}
+                <Label htmlFor={toDo.id} className="w-full">
+                  {toDo.task}
                 </Label>
                 <TbCheckbox
-                  onClick={() => handleDoneTask(index)}
+                  onClick={() => handleDoneTask(toDo.id)}
                   size={24}
-                  className="cursor-pointer transition-colors hover:opacity-50"
+                  className="transition-colors cursor-pointer hover:opacity-50"
                   color="hsl(var(--primary))"
                 />
               </li>
